@@ -206,7 +206,7 @@ window.SLIDES = [
         id: 'execute', title: 'Execute', sub: 'Agents take action',
         patterns: [
           { id: 'p3', name: 'Workplace & IT Services', tag: 'Transform internal services',
-            selfProbe: 'This is Sarah\'s pick. It proves the org can OPERATE agents — governance, lifecycle, observability — on internal users before betting external customers on them. Sit with: why is this the right starting bet for Woodgrove?' },
+            selfProbe: 'Internal-first. It proves the org can OPERATE agents — governance, lifecycle, observability — on internal users before betting external customers on them. Sit with: why might this be the right starting bet for Woodgrove?' },
           { id: 'p4', name: 'Core Business Processes', tag: 'Re-imagine end-to-end workflows',
             selfProbe: 'High ambition. The honest math: AI Strategy at 200 needs to hit 500. Business Process at 200 needs to hit 500. That\'s a Δ300 jump in 12 months — on the riskiest surface area. Achievable?' },
           { id: 'p5', name: 'External Engagement', tag: 'Re-invent customer experiences',
