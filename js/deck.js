@@ -816,7 +816,9 @@
   // ----- Slide 14: resources -----------------------------------------
   function renderResources(slide) {
     const wrap = el('div', { cls: 'resources-slide' });
-    wrap.appendChild(header(slide));
+
+    const headRow = el('div', { cls: 'resources-head' });
+    headRow.appendChild(header(slide));
 
     if (slide.config.qr) {
       const q = slide.config.qr;
@@ -825,9 +827,9 @@
       const img = el('div', { cls: 'resources-qr-img' });
       img.appendChild(el('object', { attrs: { type: 'image/svg+xml', data: q.image, 'aria-label': 'QR code for ' + q.href, tabindex: '-1' } }));
       block.appendChild(img);
-      block.appendChild(el('div', { cls: 'resources-qr-caption', text: q.title }));
-      wrap.appendChild(block);
+      headRow.appendChild(block);
     }
+    wrap.appendChild(headRow);
 
     const top = el('div', { cls: 'scenario-grid' });
     [slide.config.primary, slide.config.secondary].forEach(r => {

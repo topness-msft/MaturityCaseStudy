@@ -18,13 +18,16 @@ test('slide 14: QR code visible and links to Copilot Summit', async ({ page }) =
   await expect(block).toBeVisible();
   const href = await block.getAttribute('href');
   expect(href).toBe('https://microsoft.github.io/cat/copilot-summit/index.html');
-  const caption = await page.locator('.resources-qr-caption').textContent();
-  expect(caption.toLowerCase()).toContain('copilot summit');
+  const caption = page.locator('.resources-qr-caption');
+  await expect(caption).toHaveCount(0);
   // Should be in the top-right corner (positioned absolute)
   const box = await block.boundingBox();
   const slide = await page.locator('#slide-stage').boundingBox();
+  // Pinned to the right side
   expect(box.x + box.width).toBeGreaterThan(slide.x + slide.width - 80);
-  expect(box.y).toBeLessThan(slide.y + 80);
+  // Does not overlap the first row of cards (mode-card)
+  const firstCard = await page.locator('.mode-card').first().boundingBox();
+  expect(box.y + box.height).toBeLessThanOrEqual(firstCard.y + 2);
   await block.scrollIntoViewIfNeeded();
   await page.waitForTimeout(300);
   await page.screenshot({ path: 'temp/slide14-qr.png', fullPage: true });
