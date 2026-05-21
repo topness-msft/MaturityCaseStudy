@@ -1,7 +1,7 @@
 # Sarah Chen — Interactive Case Discussion
 
 A web-based, interactive recreation of the **Driving Agent Adoption at
-Scale** session (FOCUS103) built around Woodgrove Bank's fictional CIO
+Scale** case discussion built around Woodgrove Bank's fictional CIO
 **Sarah Chen**. Two modes:
 
 - **Self-paced** — a solo learner walks through the deck with adapted
@@ -12,7 +12,7 @@ Scale** session (FOCUS103) built around Woodgrove Bank's fictional CIO
   appear alongside the room-facing slides. Hand-raises stay physical; the
   presenter taps the room's dominant choice to drive the next probe.
 
-Source materials: the FOCUS103 deck and the **Frontier Firm Challenge
+Source materials: the case-study deck and the **Frontier Firm Challenge
 Facilitator Guide**. Visual aesthetic is consistent with
 [aka.ms/adoptionpulse](https://aka.ms/adoptionpulse).
 
@@ -131,7 +131,6 @@ root.
 
 ## Adapted from
 
-- *Driving Agent Adoption at Scale — From Pilot to Business Impact*
-  (FOCUS103). Microsoft Copilot Acceleration Team.
+- *Driving Agent Adoption at Scale — From Pilot to Business Impact.*
 - *Frontier Firm Challenge — Facilitator Guide.*
 - 2026 Work Trend Index (Microsoft & LinkedIn).

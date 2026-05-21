@@ -1105,6 +1105,64 @@ body {
 }
 .stage.revealed .stage-count { color: var(--text); }
 
+/* Side-by-side layout for self-paced: choices left, insight right */
+.stages-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+.stages-grid .stages { max-width: none; }
+.stages-aside { position: sticky; top: 12px; }
+.stage-insight {
+  border-left: 4px solid var(--blue);
+  padding: 18px 22px;
+  background: var(--blue-dim);
+  border-radius: var(--radius);
+}
+.stage-insight.reshape { border-left-color: var(--amber); background: var(--amber-dim); }
+.stage-insight.reinvent { border-left-color: var(--pink); background: var(--pink-dim); }
+.stage-insight .insight-eyebrow { color: var(--text-sec); }
+.stage-insight-placeholder {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 12px;
+  align-items: start;
+  padding: 18px 22px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  color: var(--text-sec);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+.stage-insight-placeholder-icon {
+  font-size: 1.4rem;
+  color: var(--text-dim);
+  line-height: 1;
+}
+@media (max-width: 880px) {
+  .stages-grid { grid-template-columns: 1fr; }
+  .stages-aside { position: static; }
+}
+
+/* Per-choice probe shown in self-paced polls (slides 5, 8) */
+.choice-probe {
+  margin-top: 24px;
+  padding: 18px 22px;
+  border-left: 4px solid var(--blue);
+  background: var(--blue-dim);
+  border-radius: var(--radius);
+}
+.choice-probe-eyebrow {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--blue);
+  margin-bottom: 8px;
+}
+.choice-probe-body { font-size: 1rem; line-height: 1.55; }
+
 /* ============================================================
    OPTION → PILLAR MAPPING (slide 7)
    ============================================================ */

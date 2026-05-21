@@ -16,11 +16,8 @@ window.SLIDES = [
   timing: { presentSeconds: 120 },
   render: 'title',
   config: {
-    presenters: [
-      { name: 'Aamer Kaleem', role: 'Microsoft 365 Copilot Development Leader' },
-      { name: 'Phil Topness',  role: 'Principal PM Manager' }
-    ],
-    footer: 'FOCUS103 · Microsoft Copilot Acceleration Team'
+    eyebrow: 'Interactive case study',
+    tagline: 'A fictional bank. A real strategic problem. Your call.'
   }
 },
 
@@ -29,17 +26,24 @@ window.SLIDES = [
   id: 'opening-poll',
   act: 0, actLabel: 'Opening · Gathering',
   title: 'Where are you in deploying agents?',
-  subtitle: 'Most rooms thin out dramatically as the bar rises.',
+  subtitles: {
+    self: 'Pick the highest rung your organization has actually reached.',
+    present: 'Most rooms thin out dramatically as the bar rises.'
+  },
   timing: { presentSeconds: 15, discussSeconds: 90 },
   render: 'stages',
   config: {
     presenterPrompt: 'Reveal one card at a time. Hands stay up as long as each statement is true — count out loud after each reveal so the room sees the curve.',
     selfPrompt: 'How far has your organization actually gotten? Pick the highest level that\'s true.',
     stages: [
-      { id: 's1', label: 'Exploration', detail: 'Piloted an agent — beyond chat / copilot — in the last 12 months.', expectedPct: 80, accent: 'empower' },
-      { id: 's2', label: 'Production',  detail: 'Shipped at least one agent in production touching real customers or enterprise data.', expectedPct: 40, accent: 'empower' },
-      { id: 's3', label: 'Dependency',  detail: 'The business now depends on it — if it broke tomorrow, you\'d feel it.', expectedPct: 15, accent: 'reshape' },
-      { id: 's4', label: 'Governance',  detail: 'Formal model: identity, evaluation, monitoring, rollback, human-in-the-loop.', expectedPct: 5,  accent: 'reinvent' }
+      { id: 's1', label: 'Exploration', detail: 'Piloted an agent — beyond chat / copilot — in the last 12 months.', expectedPct: 80, accent: 'empower',
+        insight: 'You\'re in the largest cohort — about 80% of rooms raise their hand here. The hard part isn\'t starting; it\'s getting from one pilot to one the business actually depends on. That gap is what the rest of this case is about.' },
+      { id: 's2', label: 'Production',  detail: 'Shipped at least one agent in production touching real customers or enterprise data.', expectedPct: 40, accent: 'empower',
+        insight: 'About 40% reach this rung. You\'ve cleared the hardest technical bar — real data, real users — but the next jump is bigger than the first. Most production agents never become something the business genuinely depends on.' },
+      { id: 's3', label: 'Dependency',  detail: 'The business now depends on it — if it broke tomorrow, you\'d feel it.', expectedPct: 15, accent: 'reshape',
+        insight: 'Only about 15% are here. The business feels you when it breaks. The question that defines what\'s next: are you actually governing it, or just hoping it keeps working? Sarah\'s story will look familiar.' },
+      { id: 's4', label: 'Governance',  detail: 'Formal model: identity, evaluation, monitoring, rollback, human-in-the-loop.', expectedPct: 5,  accent: 'reinvent',
+        insight: 'About 5% claim this rung — and most are overestimating. Real Stage 4 means identity, evaluation, monitoring, rollback, and human-in-the-loop wired in by default. If you\'re really here, this case is about how to bring everyone else up safely.' }
     ],
     selfInsight: 'Most organizations are building faster than they\'re governing. By the time we hit "the business depends on it," most rooms have only a few hands up — and "governed at scale" thins out further. That gap is what this session is about.'
   }
@@ -109,10 +113,14 @@ window.SLIDES = [
   config: {
     selfPrompt: 'Before you continue — which would you actually pick? Commit, then move on.',
     choices: [
-      { id: 'A', headline: 'Appoint an AI strategy lead', meta: 'Build a prioritized agent roadmap.' },
-      { id: 'B', headline: 'Run a value discovery across BUs', meta: 'Find the highest-ROI agent use cases.' },
-      { id: 'C', headline: 'Direct Security & Compliance to build a fast-track approval path', meta: 'Get agents into production faster.' },
-      { id: 'D', headline: 'Find motivated early adopters', meta: 'Equip them to redesign work in their teams.' }
+      { id: 'A', headline: 'Appoint an AI strategy lead', meta: 'Build a prioritized agent roadmap.',
+        selfProbe: 'You\'re thinking like a coordinator — you see a leadership gap. Hold this question: what\'s their first brief, given only 2 low-value agents are live? A roadmap leads nowhere without process redesign or governance.' },
+      { id: 'B', headline: 'Run a value discovery across BUs', meta: 'Find the highest-ROI agent use cases.',
+        selfProbe: 'You\'re measurement-minded. This is the most popular pick — and the subtle trap. Discovery in which processes? Woodgrove hasn\'t mapped them for AI yet. You can\'t discover value in processes you haven\'t mapped.' },
+      { id: 'C', headline: 'Direct Security & Compliance to build a fast-track approval path', meta: 'Get agents into production faster.',
+        selfProbe: 'Strong risk instinct — sensible for a bank. But ask yourself: how long does an agent take to ship today? What target makes the pipeline real? Without a target, "fast-track" is just a slogan.' },
+      { id: 'D', headline: 'Find motivated early adopters', meta: 'Equip them to redesign work in their teams.',
+        selfProbe: 'You\'re people-first — closest to the culture gap. The harder question: how do you scale 50 enthusiasts to 4,200 people without an underlying strategy? Without it, enthusiasm stalls.' }
     ],
     expectedSplit: { A: 20, B: 30, C: 30, D: 20 },
     afterChoiceInsight: 'Notice how split the room usually is. Every option is reasonable. Let\'s look at what\'s actually going on inside Woodgrove.'
@@ -124,7 +132,10 @@ window.SLIDES = [
   id: 'maturity',
   act: 2, actLabel: 'Act 2 · The Diagnosis',
   title: 'Activity ≠ maturity. Spend ≠ maturity.',
-  subtitle: 'Two strong pillars. So what went wrong? Reveal Tech and Governance first — then predict the rest.',
+  subtitles: {
+    self: 'Tech is at 400. Governance at 300. Before you reveal — what do you think the other three pillars score?',
+    present: 'Two strong pillars. So what went wrong? Reveal Tech and Governance first — then predict the rest.'
+  },
   timing: { presentSeconds: 60, discussSeconds: 180 },
   render: 'maturity',
   config: {
@@ -150,7 +161,10 @@ window.SLIDES = [
   id: 'bridge',
   act: 2, actLabel: 'Act 2 · The Bridge',
   title: 'Every option fixes one pillar — and only one.',
-  subtitle: 'Reveal option A, then predict B/C/D.',
+  subtitles: {
+    self: 'Option A maps to one pillar — try to match B, C, and D to a pillar each before you reveal.',
+    present: 'Reveal option A, then predict B/C/D.'
+  },
   timing: { presentSeconds: 60, discussSeconds: 120 },
   render: 'bridge',
   config: {
@@ -179,22 +193,28 @@ window.SLIDES = [
       {
         id: 'assist', title: 'Assist', sub: 'Human in the loop',
         patterns: [
-          { id: 'p1', name: 'Employee AI Enablement', tag: 'Give everyone an AI assistant' },
-          { id: 'p2', name: 'Business Expert Empowerment', tag: 'Scale expert knowledge' }
+          { id: 'p1', name: 'Employee AI Enablement', tag: 'Give everyone an AI assistant',
+            selfProbe: 'Broad but shallow. The hard question: does that actually move the board\'s needle in 12 months? Productivity gains are real but hard to attribute to a P&L line.' },
+          { id: 'p2', name: 'Business Expert Empowerment', tag: 'Scale expert knowledge',
+            selfProbe: 'You\'d prove people can use AI. The harder question: what does it NOT prove? It doesn\'t prove governance, lifecycle, or operating model. That\'s the thing the board is actually asking about.' }
         ]
       },
       {
         id: 'execute', title: 'Execute', sub: 'Agents take action',
         patterns: [
-          { id: 'p3', name: 'Workplace & IT Services', tag: 'Transform internal services' },
-          { id: 'p4', name: 'Core Business Processes', tag: 'Re-imagine end-to-end workflows' },
-          { id: 'p5', name: 'External Engagement', tag: 'Re-invent customer experiences' }
+          { id: 'p3', name: 'Workplace & IT Services', tag: 'Transform internal services',
+            selfProbe: 'This is Sarah\'s pick. It proves the org can OPERATE agents — governance, lifecycle, observability — on internal users before betting external customers on them. Sit with: why is this the right starting bet for Woodgrove?' },
+          { id: 'p4', name: 'Core Business Processes', tag: 'Re-imagine end-to-end workflows',
+            selfProbe: 'High ambition. The honest math: AI Strategy at 200 needs to hit 500. Business Process at 200 needs to hit 500. That\'s a Δ300 jump in 12 months — on the riskiest surface area. Achievable?' },
+          { id: 'p5', name: 'External Engagement', tag: 'Re-invent customer experiences',
+            selfProbe: 'Customer-facing means consequences are public. After one security incident, who at Woodgrove is willing to keep underwriting external-facing agents? Reputation risk is the bottleneck here, not technology.' }
         ]
       },
       {
         id: 'transform', title: 'Transform', sub: 'Net-new innovation',
         patterns: [
-          { id: 'p6', name: 'AI-First Capabilities', tag: 'Net-new AI-native products' }
+          { id: 'p6', name: 'AI-First Capabilities', tag: 'Net-new AI-native products',
+            selfProbe: 'Net-new is the boldest move. Honest check: does Woodgrove have the strategy and culture to greenlight net-new AI-native products today? With AI Strategy at 200 and Culture at 200, this is probably a 2027 bet, not a 2026 one.' }
         ]
       }
     ],

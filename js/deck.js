@@ -100,7 +100,7 @@
     currentIndex = index;
     const slide = SLIDES[index];
     setChrome(slide);
-    document.title = slide.title + ' · Sarah Chen';
+    document.title = slide.title + ' · Woodgrove Bank Maturity Discussion';
     if (!opts.fromSync) sync.setSlideIndex(index);
     const fade = !opts.skipAnim;
     if (fade) stage.classList.add('fading');
@@ -130,7 +130,8 @@
     const wrap = el('div');
     wrap.appendChild(el('div', { cls: 'slide-eyebrow', text: slide.actLabel || '' }));
     wrap.appendChild(el('h1', { cls: 'slide-title', html: slide.title }));
-    if (slide.subtitle) wrap.appendChild(el('p', { cls: 'slide-subtitle', html: slide.subtitle }));
+    const sub = (slide.subtitles && slide.subtitles[MODE]) || slide.subtitle;
+    if (sub) wrap.appendChild(el('p', { cls: 'slide-subtitle', html: sub }));
     return wrap;
   }
 
@@ -163,17 +164,17 @@
   // ----- Slide 1: title ----------------------------------------------
   function renderTitle(slide) {
     const wrap = el('div', { cls: 'mirror' });
-    wrap.appendChild(el('div', { cls: 'slide-eyebrow', text: slide.config.footer }));
+    if (slide.config.eyebrow) {
+      wrap.appendChild(el('div', { cls: 'slide-eyebrow', text: slide.config.eyebrow }));
+    }
     wrap.appendChild(el('h1', { cls: 'mirror-line1', text: slide.title, attrs: { style: 'font-size:3.2rem' } }));
     wrap.appendChild(el('div', { cls: 'slide-subtitle', text: slide.subtitle, attrs: { style: 'text-align:center;font-size:1.3rem' } }));
-    const row = el('div', { cls: 'stat-row', attrs: { style: 'grid-template-columns:1fr 1fr;margin-top:40px' } });
-    slide.config.presenters.forEach(p => {
-      const c = el('div', { cls: 'stat' });
-      c.appendChild(el('div', { html: p.name, attrs: { style: 'font-size:1.4rem;font-weight:700;margin-bottom:6px' } }));
-      c.appendChild(el('div', { cls: 'stat-label', text: p.role }));
-      row.appendChild(c);
-    });
-    wrap.appendChild(row);
+    if (slide.config.tagline) {
+      wrap.appendChild(el('div', {
+        text: slide.config.tagline,
+        attrs: { style: 'text-align:center;margin-top:40px;font-size:1.05rem;color:var(--text-muted);max-width:560px;margin-left:auto;margin-right:auto' }
+      }));
+    }
     return wrap;
   }
 
@@ -187,6 +188,7 @@
     if (MODE === 'self') {
       // Mutually exclusive radio behavior — clicking selects this stage as the highest level achieved
       const selected = sync.getChoice(slide.id);
+      const selectedStage = slide.config.stages.find(s => s.id === selected) || null;
       slide.config.stages.forEach(s => {
         const row = el('button', { cls: 'stage' + (selected === s.id ? ' revealed ' + s.accent : ''), attrs: { type: 'button' } });
         row.appendChild(el('span', { cls: 'stage-num', text: s.label[0] }));
@@ -201,13 +203,24 @@
         });
         list.appendChild(row);
       });
-      wrap.appendChild(list);
-      if (selected) {
-        const i = el('div', { cls: 'insight in' });
-        i.appendChild(el('div', { cls: 'insight-eyebrow', text: 'What rooms typically show' }));
-        i.appendChild(el('div', { cls: 'insight-body', text: slide.config.selfInsight }));
-        wrap.appendChild(i);
+
+      // Side-by-side layout: stages on the left, insight on the right
+      const grid = el('div', { cls: 'stages-grid' });
+      grid.appendChild(list);
+      const aside = el('div', { cls: 'stages-aside' });
+      if (selectedStage) {
+        const i = el('div', { cls: 'insight in stage-insight ' + (selectedStage.accent || '') });
+        i.appendChild(el('div', { cls: 'insight-eyebrow', text: 'If you\'re at ' + selectedStage.label }));
+        i.appendChild(el('div', { cls: 'insight-body', text: selectedStage.insight || slide.config.selfInsight }));
+        aside.appendChild(i);
+      } else {
+        const ph = el('div', { cls: 'stage-insight-placeholder' });
+        ph.appendChild(el('div', { cls: 'stage-insight-placeholder-icon', text: '←' }));
+        ph.appendChild(el('div', { text: 'Pick the highest level that\'s true to see what rooms at that stage typically face next.' }));
+        aside.appendChild(ph);
       }
+      grid.appendChild(aside);
+      wrap.appendChild(grid);
     } else {
       // Presenter mode — progressive reveal, click each stage to show it
       slide.config.stages.forEach((s, idx) => {
@@ -309,8 +322,22 @@
       list.appendChild(btn);
     });
     wrap.appendChild(list);
-    if (picked) wrap.appendChild(insightCard(slide, slide.config.afterChoiceInsight));
-    if (picked && !sync.isRevealed(slide.id, 'insight')) sync.setReveal(slide.id, 'insight', true);
+    if (picked) {
+      if (MODE === 'self') {
+        const chosen = slide.config.choices.find(c => c.id === picked);
+        if (chosen && chosen.selfProbe) {
+          const probe = el('div', { cls: 'choice-probe' });
+          probe.appendChild(el('div', { cls: 'choice-probe-eyebrow', text: 'Question to sit with' }));
+          probe.appendChild(el('div', { cls: 'choice-probe-body', text: chosen.selfProbe }));
+          wrap.appendChild(probe);
+        } else if (slide.config.afterChoiceInsight) {
+          wrap.appendChild(insightCard(slide, slide.config.afterChoiceInsight));
+        }
+      } else {
+        wrap.appendChild(insightCard(slide, slide.config.afterChoiceInsight));
+      }
+      if (!sync.isRevealed(slide.id, 'insight')) sync.setReveal(slide.id, 'insight', true);
+    }
     return wrap;
   }
 
@@ -458,6 +485,20 @@
       grid.appendChild(col);
     });
     wrap.appendChild(grid);
+    if (MODE === 'self' && picked) {
+      // Find the selected pattern across modes
+      let chosen = null;
+      slide.config.modes.forEach(m => {
+        const found = m.patterns.find(p => p.id === picked);
+        if (found) chosen = found;
+      });
+      if (chosen && chosen.selfProbe) {
+        const probe = el('div', { cls: 'choice-probe' });
+        probe.appendChild(el('div', { cls: 'choice-probe-eyebrow', text: 'Question to sit with' }));
+        probe.appendChild(el('div', { cls: 'choice-probe-body', text: chosen.selfProbe }));
+        wrap.appendChild(probe);
+      }
+    }
     return wrap;
   }
 

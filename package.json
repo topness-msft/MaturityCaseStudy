@@ -1,7 +1,7 @@
 {
   "name": "sarahchen",
   "version": "1.0.0",
-  "description": "A web-based, interactive recreation of the **Driving Agent Adoption at\r Scale** session (FOCUS103) built around Woodgrove Bank's fictional CIO\r **Sarah Chen**. Two modes:",
+  "description": "Interactive case discussion based on Woodgrove Bank's fictional CIO Sarah Chen. Two modes: self-paced and presenter-led.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
