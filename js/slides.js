@@ -197,27 +197,27 @@ window.SLIDES = [
         id: 'assist', title: 'Assist', sub: 'Human in the loop',
         patterns: [
           { id: 'p1', name: 'Employee AI Enablement', tag: 'Give everyone an AI assistant',
-            selfProbe: 'Broad but shallow. The hard question: does that actually move the board\'s needle in 12 months? Productivity gains are real but hard to attribute to a P&L line.' },
+            selfProbe: 'Sit with: how would you prove the board this moved the P&L in 12 months? What would the attribution story look like?' },
           { id: 'p2', name: 'Business Expert Empowerment', tag: 'Scale expert knowledge',
-            selfProbe: 'You\'d prove people can use AI. The harder question: what does it NOT prove? It doesn\'t prove governance, lifecycle, or operating model. That\'s the thing the board is actually asking about.' }
+            selfProbe: 'Sit with: which capability does this NOT exercise? If the board asks about governance, lifecycle, or operating model in 12 months, what would you show them?' }
         ]
       },
       {
         id: 'execute', title: 'Execute', sub: 'Agents take action',
         patterns: [
           { id: 'p3', name: 'Workplace & IT Services', tag: 'Transform internal services',
-            selfProbe: 'Internal-first. It proves the org can OPERATE agents — governance, lifecycle, observability — on internal users before betting external customers on them. Sit with: why might this be the right starting bet for Woodgrove?' },
+            selfProbe: 'Sit with: which audience is most forgiving of an agent that occasionally gets it wrong? What does it cost Woodgrove if the first agent fails here vs. elsewhere?' },
           { id: 'p4', name: 'Core Business Processes', tag: 'Re-imagine end-to-end workflows',
-            selfProbe: 'High ambition. The honest math: AI Strategy at 200 needs to hit 500. Business Process at 200 needs to hit 500. That\'s a Δ300 jump in 12 months — on the riskiest surface area. Achievable?' },
+            selfProbe: 'Sit with: AI Strategy is at 200 and Business Process is at 200 — both need to reach 400+ for this pattern. How many months of work is that, and what has to be true to compress it?' },
           { id: 'p5', name: 'External Engagement', tag: 'Re-invent customer experiences',
-            selfProbe: 'Customer-facing means consequences are public. After one security incident, who at Woodgrove is willing to keep underwriting external-facing agents? Reputation risk is the bottleneck here, not technology.' }
+            selfProbe: 'Sit with: a recent security incident is fresh. Who at Woodgrove signs off on customer-facing agents this year, and what evidence would they need to see first?' }
         ]
       },
       {
         id: 'transform', title: 'Transform', sub: 'Net-new innovation',
         patterns: [
           { id: 'p6', name: 'AI-First Capabilities', tag: 'Net-new AI-native products',
-            selfProbe: 'Net-new is the boldest move. Honest check: does Woodgrove have the strategy and culture to greenlight net-new AI-native products today? With AI Strategy at 200 and Culture at 200, this is probably a 2027 bet, not a 2026 one.' }
+            selfProbe: 'Sit with: AI Strategy and Culture are both at 200. What would you need to see in those pillars before you\'d feel comfortable greenlighting a net-new AI-native product?' }
         ]
       }
     ],
