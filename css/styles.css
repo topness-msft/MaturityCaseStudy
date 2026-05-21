@@ -1245,7 +1245,7 @@ body {
   font-weight: 600;
   color: var(--text-sec);
 }
-.predict-btns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.predict-btns { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
 .predict-btn {
   font-family: inherit;
   font-size: 0.95rem;

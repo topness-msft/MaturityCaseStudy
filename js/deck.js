@@ -433,7 +433,7 @@
         const row = el('div', { cls: 'predict-row' });
         row.appendChild(el('div', { cls: 'predict-label', text: pillar.label }));
         const btns = el('div', { cls: 'predict-btns' });
-        [200, 300, 400].forEach(v => {
+        [100, 200, 300, 400, 500].forEach(v => {
           const guess = sync.state.choices['predict-' + pid];
           const btn = el('button', { cls: 'predict-btn' + (guess === String(v) ? ' selected' : ''), attrs: { type: 'button' }, text: v });
           btn.addEventListener('click', () => {
