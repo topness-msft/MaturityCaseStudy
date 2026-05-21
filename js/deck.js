@@ -815,8 +815,20 @@
 
   // ----- Slide 14: resources -----------------------------------------
   function renderResources(slide) {
-    const wrap = el('div');
+    const wrap = el('div', { cls: 'resources-slide' });
     wrap.appendChild(header(slide));
+
+    if (slide.config.qr) {
+      const q = slide.config.qr;
+      const block = el('a', { cls: 'resources-qr corner', attrs: { href: q.href, target: '_blank', rel: 'noopener' } });
+      if (q.eyebrow) block.appendChild(el('div', { cls: 'resources-qr-eyebrow', text: q.eyebrow }));
+      const img = el('div', { cls: 'resources-qr-img' });
+      img.appendChild(el('object', { attrs: { type: 'image/svg+xml', data: q.image, 'aria-label': 'QR code for ' + q.href, tabindex: '-1' } }));
+      block.appendChild(img);
+      block.appendChild(el('div', { cls: 'resources-qr-caption', text: q.title }));
+      wrap.appendChild(block);
+    }
+
     const top = el('div', { cls: 'scenario-grid' });
     [slide.config.primary, slide.config.secondary].forEach(r => {
       const c = el('a', { cls: 'mode-card', attrs: { href: r.href, target: '_blank', rel: 'noopener' } });
@@ -837,21 +849,6 @@
       more.appendChild(c);
     });
     wrap.appendChild(more);
-
-    if (slide.config.qr) {
-      const q = slide.config.qr;
-      const block = el('a', { cls: 'resources-qr', attrs: { href: q.href, target: '_blank', rel: 'noopener' } });
-      const img = el('div', { cls: 'resources-qr-img' });
-      img.appendChild(el('object', { attrs: { type: 'image/svg+xml', data: q.image, 'aria-label': 'QR code for ' + q.href, tabindex: '-1' } }));
-      block.appendChild(img);
-      const txt = el('div', { cls: 'resources-qr-body' });
-      if (q.eyebrow) txt.appendChild(el('div', { cls: 'mode-eyebrow', text: q.eyebrow }));
-      txt.appendChild(el('h3', { text: q.title }));
-      if (q.body) txt.appendChild(el('p', { text: q.body }));
-      txt.appendChild(el('div', { cls: 'resources-qr-url', text: q.href.replace(/^https?:\/\//, '') + ' ↗' }));
-      block.appendChild(txt);
-      wrap.appendChild(block);
-    }
 
     return wrap;
   }
