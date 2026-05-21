@@ -147,10 +147,11 @@
   }
 
   function insightCard(slide, body) {
-    const c = el('div', { cls: 'insight', attrs: { 'data-reveal': 'insight' } });
+    // Always render visible; the staged-reveal animation was only a nicety
+    // and was unreliable in same-window flows (sync echoes are suppressed).
+    const c = el('div', { cls: 'insight in', attrs: { 'data-reveal': 'insight' } });
     c.appendChild(el('div', { cls: 'insight-eyebrow', text: 'Key insight' }));
     c.appendChild(el('div', { cls: 'insight-body', text: body }));
-    if (sync.isRevealed(slide.id, 'insight')) c.classList.add('in');
     return c;
   }
 
@@ -164,6 +165,21 @@
   // ----- Slide 1: title ----------------------------------------------
   function renderTitle(slide) {
     const wrap = el('div', { cls: 'mirror' });
+    if (slide.config.heroImage) {
+      const pic = document.createElement('picture');
+      if (slide.config.heroImageWebp) {
+        const src = document.createElement('source');
+        src.type = 'image/webp';
+        src.srcset = slide.config.heroImageWebp;
+        pic.appendChild(src);
+      }
+      const img = document.createElement('img');
+      img.src = slide.config.heroImage;
+      img.alt = slide.config.heroAlt || '';
+      img.className = 'hero-still';
+      pic.appendChild(img);
+      wrap.appendChild(pic);
+    }
     if (slide.config.eyebrow) {
       wrap.appendChild(el('div', { cls: 'slide-eyebrow', text: slide.config.eyebrow }));
     }
@@ -172,7 +188,7 @@
     if (slide.config.tagline) {
       wrap.appendChild(el('div', {
         text: slide.config.tagline,
-        attrs: { style: 'text-align:center;margin-top:40px;font-size:1.05rem;color:var(--text-muted);max-width:560px;margin-left:auto;margin-right:auto' }
+        attrs: { style: 'text-align:center;margin-top:32px;font-size:1.05rem;color:var(--text-muted);max-width:560px;margin-left:auto;margin-right:auto' }
       }));
     }
     return wrap;
@@ -321,22 +337,33 @@
       });
       list.appendChild(btn);
     });
-    wrap.appendChild(list);
-    if (picked) {
-      if (MODE === 'self') {
-        const chosen = slide.config.choices.find(c => c.id === picked);
-        if (chosen && chosen.selfProbe) {
-          const probe = el('div', { cls: 'choice-probe' });
-          probe.appendChild(el('div', { cls: 'choice-probe-eyebrow', text: 'Question to sit with' }));
-          probe.appendChild(el('div', { cls: 'choice-probe-body', text: chosen.selfProbe }));
-          wrap.appendChild(probe);
-        } else if (slide.config.afterChoiceInsight) {
-          wrap.appendChild(insightCard(slide, slide.config.afterChoiceInsight));
-        }
+
+    if (MODE === 'self') {
+      // Side-by-side: choices on the left, per-choice probe on the right
+      const grid = el('div', { cls: 'choices-grid' });
+      grid.appendChild(list);
+      const aside = el('div', { cls: 'choices-aside' });
+      const chosen = picked ? slide.config.choices.find(c => c.id === picked) : null;
+      if (chosen && chosen.selfProbe) {
+        const probe = el('div', { cls: 'choice-probe' });
+        probe.appendChild(el('div', { cls: 'choice-probe-eyebrow', text: 'Question to sit with' }));
+        probe.appendChild(el('div', { cls: 'choice-probe-body', text: chosen.selfProbe }));
+        aside.appendChild(probe);
       } else {
-        wrap.appendChild(insightCard(slide, slide.config.afterChoiceInsight));
+        const ph = el('div', { cls: 'stage-insight-placeholder' });
+        ph.appendChild(el('div', { cls: 'stage-insight-placeholder-icon', text: '←' }));
+        ph.appendChild(el('div', { text: 'Commit to a choice on the left. You\'ll get a question to sit with — every option is defensible, but each tells you something different about yourself.' }));
+        aside.appendChild(ph);
       }
-      if (!sync.isRevealed(slide.id, 'insight')) sync.setReveal(slide.id, 'insight', true);
+      grid.appendChild(aside);
+      wrap.appendChild(grid);
+      if (picked && !sync.isRevealed(slide.id, 'insight')) sync.setReveal(slide.id, 'insight', true);
+    } else {
+      wrap.appendChild(list);
+      if (picked) {
+        wrap.appendChild(insightCard(slide, slide.config.afterChoiceInsight));
+        if (!sync.isRevealed(slide.id, 'insight')) sync.setReveal(slide.id, 'insight', true);
+      }
     }
     return wrap;
   }
@@ -345,81 +372,91 @@
   function renderMaturity(slide) {
     const wrap = el('div');
     wrap.appendChild(header(slide));
-    const m = el('div', { cls: 'maturity' });
-    // Tech always shown; Gov revealed by click; AIS/BP/Culture hidden until predict pause cleared
-    const predictDone = sync.isRevealed(slide.id, 'predict-done');
     const showAll = sync.isRevealed(slide.id, 'reveal-rest');
 
-    slide.config.pillars.forEach(p => {
-      const isHidden = p.hidden && (!showAll);
-      const row = el('div', { cls: 'maturity-row' + (isHidden ? ' hidden' : '') });
-      row.appendChild(el('div', { cls: 'maturity-label', text: p.label }));
-      const track = el('div', { cls: 'maturity-track' });
-      const fill = el('div', { cls: 'maturity-fill ' + p.level });
-      fill.style.width = isHidden ? '0%' : ((p.value / slide.config.scaleMax) * 100) + '%';
-      track.appendChild(fill);
-      row.appendChild(track);
-      const v = el('div', { cls: 'maturity-value' });
-      v.appendChild(el('span', { text: p.value }));
-      row.appendChild(v);
-      m.appendChild(row);
-    });
-    wrap.appendChild(m);
+    function buildMaturityBars() {
+      const m = el('div', { cls: 'maturity' });
+      slide.config.pillars.forEach(p => {
+        const isHidden = p.hidden && (!showAll);
+        const row = el('div', { cls: 'maturity-row' + (isHidden ? ' hidden' : '') });
+        row.appendChild(el('div', { cls: 'maturity-label', text: p.label }));
+        const track = el('div', { cls: 'maturity-track' });
+        const fill = el('div', { cls: 'maturity-fill ' + p.level });
+        fill.style.width = isHidden ? '0%' : ((p.value / slide.config.scaleMax) * 100) + '%';
+        track.appendChild(fill);
+        row.appendChild(track);
+        const v = el('div', { cls: 'maturity-value' });
+        v.appendChild(el('span', { text: p.value }));
+        row.appendChild(v);
+        m.appendChild(row);
+      });
+      return m;
+    }
 
-    // Predict pause card
-    if (!showAll) {
-      const p = el('div', { cls: 'predict-pause' });
-      p.appendChild(el('div', { cls: 'predict-pause-title', text: slide.config.predictPause.title }));
-      p.appendChild(el('div', { text: slide.config.predictPause.body }));
-      if (MODE === 'self') {
-        // Self-paced: show interactive predictor — click to commit before reveal
-        const note = el('div', { attrs: { style: 'margin-top:12px' } });
-        note.appendChild(el('div', { text: 'Commit to a guess for each hidden pillar (200, 300, or 400). Then reveal.', attrs: { style: 'margin-bottom:10px;font-size:0.92rem;color:var(--text-sec)' } }));
-        const predictGrid = el('div', { attrs: { style: 'display:grid;gap:8px' } });
-        ['ais','bp','culture'].forEach(pid => {
-          const pillar = slide.config.pillars.find(x => x.id === pid);
-          const row = el('div', { attrs: { style: 'display:grid;grid-template-columns:170px repeat(3,1fr);gap:6px;align-items:center' } });
-          row.appendChild(el('div', { text: pillar.label, attrs: { style: 'font-size:0.88rem' } }));
-          [200, 300, 400].forEach(v => {
-            const guess = sync.state.choices['predict-' + pid];
-            const btn = el('button', { cls: 'btn btn-ghost btn-sm' + (guess === String(v) ? ' selected' : ''), attrs: { type: 'button', style: guess === String(v) ? 'border-color:var(--blue);color:var(--blue);background:var(--blue-dim)' : '' }, text: v });
-            btn.addEventListener('click', () => {
-              sync.selectChoice('predict-' + pid, String(v));
-              renderSlide(currentIndex, { skipAnim: true });
-            });
-            row.appendChild(btn);
+    if (MODE === 'self' && !showAll) {
+      // Side-by-side: bars on the left, guess panel on the right
+      const grid = el('div', { cls: 'maturity-grid' });
+      grid.appendChild(buildMaturityBars());
+
+      const aside = el('div', { cls: 'maturity-aside' });
+      const panel = el('div', { cls: 'guess-panel' });
+      panel.appendChild(el('div', { cls: 'choice-probe-eyebrow', text: 'Your turn' }));
+      panel.appendChild(el('div', { cls: 'guess-panel-body', text: 'Tech is at 400. Governance at 300. Where do you think the other three pillars land? Commit to a number for each.' }));
+
+      const predictGrid = el('div', { cls: 'predict-grid' });
+      ['ais','bp','culture'].forEach(pid => {
+        const pillar = slide.config.pillars.find(x => x.id === pid);
+        const row = el('div', { cls: 'predict-row' });
+        row.appendChild(el('div', { cls: 'predict-label', text: pillar.label }));
+        const btns = el('div', { cls: 'predict-btns' });
+        [200, 300, 400].forEach(v => {
+          const guess = sync.state.choices['predict-' + pid];
+          const btn = el('button', { cls: 'predict-btn' + (guess === String(v) ? ' selected' : ''), attrs: { type: 'button' }, text: v });
+          btn.addEventListener('click', () => {
+            sync.selectChoice('predict-' + pid, String(v));
+            renderSlide(currentIndex, { skipAnim: true });
           });
-          predictGrid.appendChild(row);
+          btns.appendChild(btn);
         });
-        note.appendChild(predictGrid);
-        p.appendChild(note);
-        const allGuessed = ['ais','bp','culture'].every(pid => sync.state.choices['predict-' + pid]);
-        const btnRow = el('div', { attrs: { style: 'margin-top:14px' } });
-        const revealBtn = el('button', { cls: 'btn btn-primary', text: 'Reveal the answers', attrs: { type: 'button' } });
-        revealBtn.disabled = !allGuessed;
-        revealBtn.addEventListener('click', () => {
-          sync.setReveal(slide.id, 'reveal-rest', true);
-          renderSlide(currentIndex, { skipAnim: true });
-        });
-        btnRow.appendChild(revealBtn);
-        p.appendChild(btnRow);
-      } else {
-        // Presenter: just a "Reveal the rest" button
-        const btnRow = el('div', { attrs: { style: 'margin-top:14px' } });
+        row.appendChild(btns);
+        predictGrid.appendChild(row);
+      });
+      panel.appendChild(predictGrid);
+
+      const allGuessed = ['ais','bp','culture'].every(pid => sync.state.choices['predict-' + pid]);
+      const revealBtn = el('button', {
+        cls: 'btn btn-primary' + (allGuessed ? '' : ' disabled'),
+        text: allGuessed ? 'Reveal the answers' : 'Pick a guess for each pillar first',
+        attrs: { type: 'button', style: 'margin-top:16px;width:100%' }
+      });
+      revealBtn.disabled = !allGuessed;
+      revealBtn.addEventListener('click', () => {
+        sync.setReveal(slide.id, 'reveal-rest', true);
+        renderSlide(currentIndex, { skipAnim: true });
+      });
+      panel.appendChild(revealBtn);
+      aside.appendChild(panel);
+      grid.appendChild(aside);
+      wrap.appendChild(grid);
+    } else {
+      wrap.appendChild(buildMaturityBars());
+
+      if (MODE !== 'self' && !showAll) {
+        // Presenter: keep the simple reveal CTA
+        const btnRow = el('div', { attrs: { style: 'margin-top:18px;text-align:center' } });
         const revealBtn = el('button', { cls: 'btn btn-primary', text: 'Reveal AI Strategy · Business Process · Culture', attrs: { type: 'button' } });
         revealBtn.addEventListener('click', () => {
           sync.setReveal(slide.id, 'reveal-rest', true);
           renderSlide(currentIndex, { skipAnim: true });
         });
         btnRow.appendChild(revealBtn);
-        p.appendChild(btnRow);
+        wrap.appendChild(btnRow);
       }
-      wrap.appendChild(p);
-    }
 
-    if (showAll) {
-      wrap.appendChild(insightCard(slide, slide.config.insight));
-      if (!sync.isRevealed(slide.id, 'insight')) sync.setReveal(slide.id, 'insight', true);
+      if (showAll) {
+        wrap.appendChild(insightCard(slide, slide.config.insight));
+        if (!sync.isRevealed(slide.id, 'insight')) sync.setReveal(slide.id, 'insight', true);
+      }
     }
     return wrap;
   }
@@ -430,29 +467,41 @@
     wrap.appendChild(header(slide));
     wrap.appendChild(reflectionCard(slide.config.selfPrompt));
     const list = el('div', { cls: 'map-list' });
-    const revealAll = sync.isRevealed(slide.id, 'reveal-rest');
+
+    function isMappingRevealed(m) {
+      if (!m.hidden) return true;
+      return sync.isRevealed(slide.id, 'map-' + m.id);
+    }
 
     slide.config.mappings.forEach(m => {
-      const isHidden = m.hidden && !revealAll;
-      const row = el('div', { cls: 'map-row' + (isHidden ? ' hidden' : ' revealed') });
+      const revealed = isMappingRevealed(m);
+      const isClickable = m.hidden && !revealed;
+      const row = el(isClickable ? 'button' : 'div', {
+        cls: 'map-row' + (revealed ? ' revealed' : ' hidden'),
+        attrs: isClickable ? { type: 'button', 'aria-label': 'Reveal pillar mapping for option ' + m.id } : undefined
+      });
       row.appendChild(el('span', { cls: 'map-letter', text: m.id }));
       const op = el('div', { cls: 'map-option' });
       op.appendChild(el('div', { cls: 'map-option-headline', text: m.option }));
       op.appendChild(el('div', { cls: 'map-option-detail', text: m.detail }));
       row.appendChild(op);
-      const pill = el('div', { cls: 'map-pillar', html: `${m.pillar}<span class="lvl">· ${m.value}</span>` });
+      const pill = el('div', {
+        cls: 'map-pillar',
+        html: revealed ? `${m.pillar}<span class="lvl">· ${m.value}</span>` : 'Click to reveal'
+      });
       row.appendChild(pill);
+      if (isClickable) {
+        row.addEventListener('click', () => {
+          sync.setReveal(slide.id, 'map-' + m.id, true);
+          renderSlide(currentIndex, { skipAnim: true });
+        });
+      }
       list.appendChild(row);
     });
     wrap.appendChild(list);
 
-    if (!revealAll) {
-      const ctrl = el('div', { attrs: { style: 'margin-top:18px' } });
-      const btn = el('button', { cls: 'btn btn-primary', text: 'Reveal B, C, and D', attrs: { type: 'button' } });
-      btn.addEventListener('click', () => sync.setReveal(slide.id, 'reveal-rest', true));
-      ctrl.appendChild(btn);
-      wrap.appendChild(ctrl);
-    } else {
+    const allRevealed = slide.config.mappings.every(isMappingRevealed);
+    if (allRevealed) {
       wrap.appendChild(insightCard(slide, slide.config.insight));
       if (!sync.isRevealed(slide.id, 'insight')) sync.setReveal(slide.id, 'insight', true);
     }

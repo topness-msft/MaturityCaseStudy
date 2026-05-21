@@ -1145,6 +1145,106 @@ body {
   .stages-aside { position: static; }
 }
 
+/* Side-by-side choice layout (slide 5) — same skeleton as stages-grid */
+.choices-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+  margin-top: 18px;
+}
+.choices-aside { position: sticky; top: 12px; }
+@media (max-width: 880px) {
+  .choices-grid { grid-template-columns: 1fr; }
+  .choices-aside { position: static; }
+}
+
+/* Side-by-side maturity layout (slide 6 self-paced) */
+.maturity-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+  margin-top: 14px;
+}
+.maturity-aside { position: sticky; top: 12px; }
+.guess-panel {
+  background: var(--blue-dim);
+  border-left: 4px solid var(--blue);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+}
+.guess-panel-body {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 8px 0 16px;
+  color: var(--text);
+}
+.predict-grid { display: grid; gap: 12px; }
+.predict-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+}
+.predict-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-sec);
+}
+.predict-btns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.predict-btn {
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text-sec);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.predict-btn:hover { border-color: var(--blue); color: var(--blue); }
+.predict-btn.selected { border-color: var(--blue); color: var(--blue); background: var(--blue-dim); }
+@media (max-width: 880px) {
+  .maturity-grid { grid-template-columns: 1fr; }
+  .maturity-aside { position: static; }
+}
+
+/* Clickable map-row for slide 7 */
+button.map-row {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+}
+button.map-row:hover {
+  border-color: var(--blue);
+  background: var(--blue-dim);
+}
+button.map-row:hover .map-letter { background: var(--blue); color: #fff; }
+.map-row.hidden .map-pillar {
+  opacity: 0.6;
+  filter: none;
+  font-style: italic;
+  color: var(--text-dim);
+}
+
+/* Hero image on the title slide */
+.hero-still {
+  width: 100%;
+  max-width: 880px;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-lg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin: 0 auto 24px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.10);
+}
+
 /* Per-choice probe shown in self-paced polls (slides 5, 8) */
 .choice-probe {
   margin-top: 24px;

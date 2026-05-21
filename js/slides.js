@@ -17,7 +17,10 @@ window.SLIDES = [
   render: 'title',
   config: {
     eyebrow: 'Interactive case study',
-    tagline: 'A fictional bank. A real strategic problem. Your call.'
+    tagline: 'A fictional bank. A real strategic problem. Your call.',
+    heroImage: './assets/sarah-chen-hero.jpg',
+    heroImageWebp: './assets/sarah-chen-hero.webp',
+    heroAlt: 'Sarah Chen, CIO of Woodgroove Bank'
   }
 },
 
