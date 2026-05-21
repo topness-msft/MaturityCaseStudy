@@ -690,16 +690,30 @@
       const row = el('div', { cls: 'gap-row' + (exp ? ' expanded' : ''), attrs: { tabindex: '0', role: 'button', 'aria-expanded': exp ? 'true' : 'false' } });
       const head = el('div', { cls: 'gap-head' });
       head.appendChild(el('div', { cls: 'gap-pillar', text: g.pillar }));
-      const bar = el('div', { cls: 'gap-bar' });
-      const fill = el('div', { cls: 'gap-fill' });
-      fill.style.width = ((g.current / slide.config.scaleMax) * 100) + '%';
-      bar.appendChild(fill);
-      const target = el('div', { cls: 'gap-target' });
-      target.style.left = ((g.target / slide.config.scaleMax) * 100) + '%';
-      bar.appendChild(target);
-      head.appendChild(bar);
       const deltaClass = g.delta === 0 ? 'zero' : g.delta <= 100 ? 'small' : 'large';
-      head.appendChild(el('div', { cls: 'gap-delta ' + deltaClass, text: g.delta === 0 ? 'Δ0 (already there)' : 'Δ' + g.delta + ' · ' + g.current + '→' + g.target }));
+      const bar = el('div', { cls: 'gap-bar' });
+      const currentPct = (g.current / slide.config.scaleMax) * 100;
+      const targetPct  = (g.target  / slide.config.scaleMax) * 100;
+      const deltaPct   = Math.max(0, targetPct - currentPct);
+
+      const fill = el('div', { cls: 'gap-fill' });
+      fill.style.width = currentPct + '%';
+      fill.appendChild(el('span', { cls: 'gap-fill-label', text: g.current }));
+      bar.appendChild(fill);
+
+      if (deltaPct > 0) {
+        const seg = el('div', { cls: 'gap-segment ' + deltaClass });
+        seg.style.left = currentPct + '%';
+        seg.style.width = deltaPct + '%';
+        seg.appendChild(el('span', { cls: 'gap-segment-label', text: 'Δ' + g.delta + ' → ' + g.target }));
+        bar.appendChild(seg);
+      } else {
+        // Already at target — show a small badge inside the fill
+        const badge = el('span', { cls: 'gap-onpoint', text: 'on target' });
+        fill.appendChild(badge);
+      }
+
+      head.appendChild(bar);
       row.appendChild(head);
       row.appendChild(el('div', { cls: 'gap-action', text: g.action }));
       const toggle = () => {
@@ -750,22 +764,14 @@
     return wrap;
   }
 
-  // ----- Slide 12: mirror (forced pause) -----------------------------
+  // ----- Slide 12: mirror (static — all content visible) ------------
   function renderMirror(slide) {
     const wrap = el('div');
-    const m = el('div', { cls: 'mirror' });
+    const m = el('div', { cls: 'mirror static' });
     m.appendChild(el('div', { cls: 'slide-eyebrow', text: slide.actLabel, attrs: { style: 'justify-content:center' } }));
     m.appendChild(el('div', { cls: 'mirror-line1', text: slide.title }));
-
-    let stage = sync.state.reveals[slide.id] || {};
-    const r2 = !!stage.r2, r3 = !!stage.r3, r4 = !!stage.r4, r5 = !!stage.r5, r6 = !!stage.r6;
-    if (r2) m.classList.add('r2');
-    if (r3) m.classList.add('r3');
-    if (r4) m.classList.add('r4');
-    if (r5) m.classList.add('r5');
-    if (r6) m.classList.add('r6');
-
     m.appendChild(el('div', { cls: 'mirror-line2', text: slide.config.line2 }));
+
     const stats = el('div', { cls: 'mirror-stats' });
     slide.config.stats.forEach(s => {
       const c = el('div', { cls: 'mirror-stat stat ' + (s.accent === 'amber' ? 'amber' : s.accent === 'pink' ? 'pink' : '') });
@@ -774,32 +780,12 @@
       stats.appendChild(c);
     });
     m.appendChild(stats);
+
     const q = el('div', { cls: 'mirror-quote' });
     q.appendChild(el('span', { text: slide.config.quote }));
     q.appendChild(el('div', { cls: 'mirror-quote-attrib', text: slide.config.quoteAttrib }));
     m.appendChild(q);
 
-    const ctrl = el('div', { attrs: { style: 'margin-top:36px' } });
-    let next, label;
-    if (!r2)       { next = 'r2'; label = 'But these numbers are not.'; }
-    else if (!r3)  { next = 'r3'; label = 'Reveal 66%'; }
-    else if (!r4)  { next = 'r4'; label = 'Reveal 45%'; }
-    else if (!r5)  { next = 'r5'; label = 'Reveal 13%'; }
-    else if (!r6)  { next = 'r6'; label = 'Reveal the Lakhani quote'; }
-    if (next) {
-      const btn = el('button', { cls: 'btn btn-primary', text: label, attrs: { type: 'button' } });
-      const sinceEnter = Date.now() - mirrorPauseAt;
-      const needWait = !r2 && sinceEnter < slide.config.forcedPauseMs;
-      if (needWait) {
-        btn.disabled = true;
-        const remaining = slide.config.forcedPauseMs - sinceEnter;
-        setTimeout(() => { btn.disabled = false; btn.textContent = label; }, remaining);
-        btn.textContent = '… pause …';
-      }
-      btn.addEventListener('click', () => sync.setReveal(slide.id, next, true));
-      ctrl.appendChild(btn);
-    }
-    m.appendChild(ctrl);
     wrap.appendChild(m);
     return wrap;
   }

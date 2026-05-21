@@ -317,7 +317,7 @@ window.SLIDES = [
   timing: { presentSeconds: 60, discussSeconds: 180 },
   render: 'opmodel',
   config: {
-    challenge: 'You\'re Sarah\'s CoE lead. Day one. 90 days to board review. The bet is P3. What are your first three moves?',
+    challenge: 'You\'re Sarah\'s CoE lead. Day one. 90 days to board review. The bet is Workplace & IT Services. What are your first three moves?',
     horizons: [
       {
         id: 'h1', num: 1, title: 'Close foundational gaps', window: '0 → 30 days',
@@ -347,7 +347,7 @@ window.SLIDES = [
         ]
       }
     ],
-    insight: 'P3 is the proving ground. Once governance, culture, and strategy are proven on IT services, more complex patterns like core business processes become the natural next move.'
+    insight: 'Workplace & IT Services is the proving ground. Once governance, culture, and strategy are proven on internal services, more complex patterns like core business processes become the natural next move.'
   }
 },
 

@@ -859,7 +859,64 @@ body {
 .gap-row.expanded { border-color: var(--blue); background: var(--blue-dim); }
 .gap-head {
   display: grid;
-  grid-template-columns: 1fr 1fr auto;
+  grid-template-columns: 200px 1fr;
+  gap: 18px;
+  align-items: center;
+}
+.gap-pillar { font-weight: 600; }
+.gap-bar {
+  position: relative;
+  height: 30px;
+  background: var(--elevated);
+  border-radius: 6px;
+  overflow: visible;
+}
+.gap-fill {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: var(--green);
+  border-radius: 6px 0 0 6px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 8px;
+  min-width: 28px;
+  z-index: 1;
+}
+.gap-fill-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+.gap-segment {
+  position: absolute; top: 0; bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 6px 6px 0;
+  padding: 0 8px;
+  z-index: 0;
+}
+.gap-segment.zero  { background: transparent; }
+.gap-segment.small { background: var(--amber); }
+.gap-segment.large { background: var(--pink); }
+.gap-segment-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.gap-onpoint {
+  margin-left: 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #fff;
+  opacity: 0.85;
+}
+.gap-action {
   gap: 18px;
   align-items: center;
 }
@@ -974,8 +1031,8 @@ body {
   overflow: hidden;
   transition: opacity 0.5s ease, transform 0.5s ease, max-height 0.5s ease, margin-bottom 0.5s ease;
 }
-.mirror.r2 .mirror-line2 { opacity: 1; transform: translateY(0); max-height: 4em; }
-.mirror:not(.r2) .mirror-line2 { margin-bottom: 0; }
+.mirror.r2 .mirror-line2, .mirror.static .mirror-line2 { opacity: 1; transform: translateY(0); max-height: 4em; }
+.mirror:not(.r2):not(.static) .mirror-line2 { margin-bottom: 0; }
 
 .mirror-stats {
   display: grid;
@@ -986,10 +1043,10 @@ body {
   overflow: hidden;
   transition: max-height 0.6s ease, margin-bottom 0.5s ease;
 }
-.mirror.r3 .mirror-stats, .mirror.r4 .mirror-stats, .mirror.r5 .mirror-stats { max-height: 400px; }
-.mirror:not(.r3):not(.r4):not(.r5) .mirror-stats { margin-bottom: 0; }
+.mirror.r3 .mirror-stats, .mirror.r4 .mirror-stats, .mirror.r5 .mirror-stats, .mirror.static .mirror-stats { max-height: 400px; }
+.mirror:not(.r3):not(.r4):not(.r5):not(.static) .mirror-stats { margin-bottom: 0; }
 .mirror-stat { opacity: 0; transform: translateY(8px); transition: opacity 0.5s ease, transform 0.5s ease; }
-.mirror.r3 .mirror-stat:nth-child(1) { opacity: 1; transform: none; transition-delay: 0s; }
+.mirror.r3 .mirror-stat:nth-child(1), .mirror.static .mirror-stat { opacity: 1; transform: none; transition-delay: 0s; }
 .mirror.r4 .mirror-stat:nth-child(2) { opacity: 1; transform: none; transition-delay: 0.25s; }
 .mirror.r5 .mirror-stat:nth-child(3) { opacity: 1; transform: none; transition-delay: 0.5s; }
 .mirror-stat .stat-num { font-size: 3.8rem; }
@@ -1004,8 +1061,8 @@ body {
   overflow: hidden;
   transition: opacity 0.6s ease, max-height 0.6s ease, margin-top 0.5s ease;
 }
-.mirror.r6 .mirror-quote { opacity: 1; max-height: 400px; }
-.mirror:not(.r6) .mirror-quote { margin-top: 0; }
+.mirror.r6 .mirror-quote, .mirror.static .mirror-quote { opacity: 1; max-height: 400px; }
+.mirror:not(.r6):not(.static) .mirror-quote { margin-top: 0; }
 .mirror-quote-attrib {
   margin-top: 12px;
   font-size: 0.85rem;
