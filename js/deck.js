@@ -164,9 +164,10 @@
 
   // ----- Slide 1: title ----------------------------------------------
   function renderTitle(slide) {
-    const wrap = el('div', { cls: 'mirror' });
+    const wrap = el('div', { cls: 'mirror title-hero-wrap' });
     if (slide.config.heroImage) {
       const pic = document.createElement('picture');
+      pic.className = 'title-hero-bg';
       if (slide.config.heroImageWebp) {
         const src = document.createElement('source');
         src.type = 'image/webp';
@@ -176,21 +177,22 @@
       const img = document.createElement('img');
       img.src = slide.config.heroImage;
       img.alt = slide.config.heroAlt || '';
-      img.className = 'hero-still';
       pic.appendChild(img);
       wrap.appendChild(pic);
     }
+    const content = el('div', { cls: 'title-hero-content' });
     if (slide.config.eyebrow) {
-      wrap.appendChild(el('div', { cls: 'slide-eyebrow', text: slide.config.eyebrow }));
+      content.appendChild(el('div', { cls: 'slide-eyebrow', text: slide.config.eyebrow }));
     }
-    wrap.appendChild(el('h1', { cls: 'mirror-line1', text: slide.title, attrs: { style: 'font-size:3.2rem' } }));
-    wrap.appendChild(el('div', { cls: 'slide-subtitle', text: slide.subtitle, attrs: { style: 'text-align:center;font-size:1.3rem' } }));
+    content.appendChild(el('h1', { cls: 'mirror-line1', text: slide.title, attrs: { style: 'font-size:3.2rem' } }));
+    content.appendChild(el('div', { cls: 'slide-subtitle', text: slide.subtitle, attrs: { style: 'text-align:center;font-size:1.3rem' } }));
     if (slide.config.tagline) {
-      wrap.appendChild(el('div', {
+      content.appendChild(el('div', {
         text: slide.config.tagline,
         attrs: { style: 'text-align:center;margin-top:32px;font-size:1.05rem;color:var(--text-muted);max-width:560px;margin-left:auto;margin-right:auto' }
       }));
     }
+    wrap.appendChild(content);
     return wrap;
   }
 
@@ -376,6 +378,7 @@
 
     function buildMaturityBars() {
       const m = el('div', { cls: 'maturity' });
+      const guessablePillars = new Set(['ais', 'bp', 'culture']);
       slide.config.pillars.forEach(p => {
         const isHidden = p.hidden && (!showAll);
         const row = el('div', { cls: 'maturity-row' + (isHidden ? ' hidden' : '') });
@@ -384,7 +387,28 @@
         const fill = el('div', { cls: 'maturity-fill ' + p.level });
         fill.style.width = isHidden ? '0%' : ((p.value / slide.config.scaleMax) * 100) + '%';
         track.appendChild(fill);
-        row.appendChild(track);
+
+        if (showAll && guessablePillars.has(p.id)) {
+          const guessRaw = sync.state.choices['predict-' + p.id];
+          const guess = guessRaw ? Number(guessRaw) : null;
+          if (guess != null) {
+            const correct = guess === p.value;
+            const wrap2 = el('div', { cls: 'maturity-track-wrap' });
+            wrap2.appendChild(track);
+            const marker = el('div', {
+              cls: 'maturity-guess-marker' + (correct ? ' correct' : ' off'),
+              attrs: { style: 'left:' + ((guess / slide.config.scaleMax) * 100) + '%' }
+            });
+            marker.title = 'Your guess: ' + guess + (correct ? ' (correct)' : '');
+            marker.appendChild(el('span', { cls: 'maturity-guess-marker-label', text: 'You · ' + guess + (correct ? ' ✓' : '') }));
+            wrap2.appendChild(marker);
+            row.appendChild(wrap2);
+          } else {
+            row.appendChild(track);
+          }
+        } else {
+          row.appendChild(track);
+        }
         const v = el('div', { cls: 'maturity-value' });
         v.appendChild(el('span', { text: p.value }));
         row.appendChild(v);
@@ -573,25 +597,72 @@
       wrap.appendChild(strip);
     }
 
-    const grid = el('div', { cls: 'quadrants' });
+    // Column model: clicking a top square reveals itself + the square below it
+    const columns = [
+      { topId: 'bet', bottomId: 'value' },
+      { topId: 'parallel', bottomId: 'notwhy' }
+    ];
+    const findQuad = id => slide.config.quadrants.find(q => q.id === id);
     const revealedAll = sync.isRevealed(slide.id, 'reveal-all');
-    slide.config.quadrants.forEach((q, idx) => {
-      const isRev = revealedAll || sync.isRevealed(slide.id, q.id);
-      const card = el('div', { cls: 'quad ' + q.accent + (isRev ? ' revealed' : '') });
+    const isColRevealed = col => revealedAll || sync.isRevealed(slide.id, col.topId);
+
+    const grid = el('div', { cls: 'quadrants' });
+
+    // Top row
+    columns.forEach(col => {
+      const q = findQuad(col.topId);
+      const isRev = isColRevealed(col);
+      const card = el(isRev ? 'div' : 'button', {
+        cls: 'quad ' + q.accent + (isRev ? ' revealed' : ' clickable'),
+        attrs: isRev ? undefined : { type: 'button', 'aria-label': 'Reveal ' + q.title }
+      });
+      card.appendChild(el('div', { cls: 'quad-eyebrow', text: q.eyebrow }));
+      card.appendChild(el('div', { cls: 'quad-title', text: q.title }));
+      if (isRev) {
+        const ul = el('ul');
+        q.items.forEach(item => ul.appendChild(el('li', { text: item })));
+        card.appendChild(ul);
+      } else {
+        card.appendChild(el('div', { cls: 'quad-hint', text: 'Click to reveal the details — and the card below it' }));
+      }
+      if (!isRev) {
+        card.addEventListener('click', () => {
+          sync.setReveal(slide.id, col.topId, true);
+          renderSlide(currentIndex, { skipAnim: true });
+        });
+      }
+      grid.appendChild(card);
+    });
+
+    // Bottom row
+    columns.forEach(col => {
+      const q = findQuad(col.bottomId);
+      const isRev = isColRevealed(col);
+      if (!isRev) {
+        const placeholder = el('div', { cls: 'quad quad-placeholder' });
+        placeholder.appendChild(el('div', { cls: 'quad-eyebrow', text: q.eyebrow }));
+        placeholder.appendChild(el('div', { cls: 'quad-placeholder-body', text: 'Locked — reveal the card above to unlock.' }));
+        grid.appendChild(placeholder);
+        return;
+      }
+      const card = el('div', { cls: 'quad ' + q.accent + ' revealed' });
       card.appendChild(el('div', { cls: 'quad-eyebrow', text: q.eyebrow }));
       card.appendChild(el('div', { cls: 'quad-title', text: q.title }));
       const ul = el('ul');
       q.items.forEach(item => ul.appendChild(el('li', { text: item })));
       card.appendChild(ul);
-      card.addEventListener('click', () => sync.setReveal(slide.id, q.id, !isRev));
       grid.appendChild(card);
     });
     wrap.appendChild(grid);
 
-    if (!revealedAll) {
+    const allColumnsOpen = columns.every(isColRevealed);
+    if (!allColumnsOpen) {
       const ctrl = el('div', { attrs: { style: 'margin-top:18px' } });
       const btn = el('button', { cls: 'btn btn-ghost', text: 'Reveal all four', attrs: { type: 'button' } });
-      btn.addEventListener('click', () => sync.setReveal(slide.id, 'reveal-all', true));
+      btn.addEventListener('click', () => {
+        sync.setReveal(slide.id, 'reveal-all', true);
+        renderSlide(currentIndex, { skipAnim: true });
+      });
       ctrl.appendChild(btn);
       wrap.appendChild(ctrl);
     }
@@ -631,7 +702,10 @@
       head.appendChild(el('div', { cls: 'gap-delta ' + deltaClass, text: g.delta === 0 ? 'Δ0 (already there)' : 'Δ' + g.delta + ' · ' + g.current + '→' + g.target }));
       row.appendChild(head);
       row.appendChild(el('div', { cls: 'gap-action', text: g.action }));
-      const toggle = () => sync.setReveal(slide.id, g.id, !exp);
+      const toggle = () => {
+        sync.setReveal(slide.id, g.id, !exp);
+        renderSlide(currentIndex, { skipAnim: true });
+      };
       row.addEventListener('click', toggle);
       row.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
       list.appendChild(row);
@@ -772,8 +846,6 @@
     });
     wrap.appendChild(more);
 
-    const close = el('div', { cls: 'quote-card', text: slide.config.closingLine, attrs: { style: 'margin-top:24px;font-size:1.2rem;text-align:center' } });
-    wrap.appendChild(close);
     return wrap;
   }
 

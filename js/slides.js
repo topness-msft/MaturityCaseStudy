@@ -286,7 +286,7 @@ window.SLIDES = [
   id: 'gaps',
   act: 4, actLabel: 'Act 4 · The Plan',
   title: 'Every gap is closeable',
-  subtitle: 'Target maturity for Pattern 3. Click each pillar to see Sarah\'s action.',
+  subtitle: 'Target maturity to ship Workplace & IT Services. Click each pillar to see Sarah\'s action.',
   timing: { presentSeconds: 60, discussSeconds: 180 },
   render: 'gaps',
   config: {
@@ -419,8 +419,7 @@ window.SLIDES = [
       { title: 'Agentic Maturity Model',          body: 'Deep dive into the maturity pillars with prescriptive guidance.', href: 'https://aka.ms/AgentMaturityModel' },
       { title: 'Agentic CoE Playbook',            body: 'How to stand up a Center of Excellence for agentic AI.',          href: 'https://aka.ms/CAPEAgenticCOEPlaybook' },
       { title: 'Power Up',                        body: 'Hands-on skilling on Microsoft\'s agentic platform.',              href: 'https://aka.ms/powerup' }
-    ],
-    closingLine: 'Will you run this diagnostic for your own organization this month?'
+    ]
   }
 }
 

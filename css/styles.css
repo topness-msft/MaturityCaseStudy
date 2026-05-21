@@ -607,6 +607,44 @@ body {
 .maturity-row.hidden .maturity-value::after { content: '?'; }
 .maturity-row.hidden .maturity-value > span { display: none; }
 
+/* Marker showing the user's guess on top of the revealed bar */
+.maturity-track-wrap {
+  position: relative;
+  padding-top: 22px;
+}
+.maturity-guess-marker {
+  position: absolute;
+  top: 14px;
+  bottom: -6px;
+  width: 3px;
+  transform: translateX(-50%);
+  background: var(--text-pri);
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 2;
+}
+.maturity-guess-marker.correct { background: #16a34a; }
+.maturity-guess-marker.off { background: #dc2626; }
+.maturity-guess-marker.correct .maturity-guess-marker-label { color: #16a34a; }
+.maturity-guess-marker.off .maturity-guess-marker-label { color: #dc2626; }
+.maturity-guess-marker-label {
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: inherit;
+  background: #fff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid currentColor;
+  line-height: 1;
+}
+
 .predict-pause {
   margin-top: 18px;
   padding: 16px 20px;
@@ -932,11 +970,24 @@ body {
   margin-bottom: 40px;
   opacity: 0;
   transform: translateY(8px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 0.5s ease, transform 0.5s ease, max-height 0.5s ease, margin-bottom 0.5s ease;
 }
-.mirror.r2 .mirror-line2 { opacity: 1; transform: translateY(0); }
+.mirror.r2 .mirror-line2 { opacity: 1; transform: translateY(0); max-height: 4em; }
+.mirror:not(.r2) .mirror-line2 { margin-bottom: 0; }
 
-.mirror-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; margin-bottom: 32px; }
+.mirror-stats {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 18px;
+  margin-bottom: 32px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.6s ease, margin-bottom 0.5s ease;
+}
+.mirror.r3 .mirror-stats, .mirror.r4 .mirror-stats, .mirror.r5 .mirror-stats { max-height: 400px; }
+.mirror:not(.r3):not(.r4):not(.r5) .mirror-stats { margin-bottom: 0; }
 .mirror-stat { opacity: 0; transform: translateY(8px); transition: opacity 0.5s ease, transform 0.5s ease; }
 .mirror.r3 .mirror-stat:nth-child(1) { opacity: 1; transform: none; transition-delay: 0s; }
 .mirror.r4 .mirror-stat:nth-child(2) { opacity: 1; transform: none; transition-delay: 0.25s; }
@@ -949,9 +1000,12 @@ body {
   margin-top: 16px;
   line-height: 1.55;
   opacity: 0;
-  transition: opacity 0.6s ease;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 0.6s ease, max-height 0.6s ease, margin-top 0.5s ease;
 }
-.mirror.r6 .mirror-quote { opacity: 1; }
+.mirror.r6 .mirror-quote { opacity: 1; max-height: 400px; }
+.mirror:not(.r6) .mirror-quote { margin-top: 0; }
 .mirror-quote-attrib {
   margin-top: 12px;
   font-size: 0.85rem;
@@ -1232,7 +1286,42 @@ button.map-row:hover .map-letter { background: var(--blue); color: #fff; }
   color: var(--text-dim);
 }
 
-/* Hero image on the title slide */
+/* Hero image on the title slide — faded backdrop behind the text */
+.title-hero-wrap {
+  position: relative;
+  isolation: isolate;
+  padding: 72px 32px 56px;
+  min-height: 520px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.title-hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  display: block;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  pointer-events: none;
+}
+.title-hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 28%;
+  opacity: 0.22;
+  -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 55%, rgba(0,0,0,0) 92%);
+          mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 55%, rgba(0,0,0,0) 92%);
+}
+.title-hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 760px;
+  width: 100%;
+}
+.title-hero-content .slide-eyebrow { text-align: center; }
+/* Legacy stacked hero kept in case other slides use it */
 .hero-still {
   width: 100%;
   max-width: 880px;
