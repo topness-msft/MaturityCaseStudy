@@ -420,7 +420,14 @@ window.SLIDES = [
       { title: 'Agentic Maturity Model',          body: 'Deep dive into the maturity pillars with prescriptive guidance.', href: 'https://aka.ms/AgentMaturityModel' },
       { title: 'Agentic CoE Playbook',            body: 'How to stand up a Center of Excellence for agentic AI.',          href: 'https://aka.ms/CAPEAgenticCOEPlaybook' },
       { title: 'Power Up',                        body: 'Hands-on skilling on Microsoft\'s agentic platform.',              href: 'https://aka.ms/powerup' }
-    ]
+    ],
+    qr: {
+      eyebrow: 'Scan to continue',
+      title: 'Copilot Summit hub',
+      body: 'Everything from this session — plus the rest of the Copilot Summit toolkit.',
+      href: 'https://microsoft.github.io/cat/copilot-summit/index.html',
+      image: './images/qr-copilot-summit.svg'
+    }
   }
 }
 

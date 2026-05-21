@@ -1170,6 +1170,49 @@ body {
   color: var(--text-dim);
   font-weight: 700;
 }
+.resources-qr {
+  display: grid;
+  grid-template-columns: 168px 1fr;
+  gap: 28px;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  margin: 24px 0 8px;
+  max-width: 1080px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+.resources-qr:hover { border-color: var(--blue); transform: translateY(-1px); }
+.resources-qr-img {
+  width: 168px;
+  height: 168px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+}
+.resources-qr-img object { width: 100%; height: 100%; display: block; pointer-events: none; }
+.resources-qr-body h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 6px 0 6px;
+  color: var(--text);
+}
+.resources-qr-body p {
+  color: var(--text-sec);
+  font-size: 0.95rem;
+  line-height: 1.55;
+  margin: 0 0 10px;
+}
+.resources-qr-url {
+  font-size: 0.85rem;
+  color: var(--blue);
+  font-family: var(--mono, monospace);
+}
 .quote-card {
   background: var(--blue-dim);
   border-left: 4px solid var(--blue);
