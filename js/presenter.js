@@ -171,7 +171,9 @@
     }
 
     btnPrev.disabled = idx === 0;
-    btnNext.disabled = idx === SLIDES.length - 1;
+    const isLast = idx === SLIDES.length - 1;
+    btnNext.disabled = isLast;
+    btnNext.style.visibility = isLast ? 'hidden' : '';
 
     updateTimer();
   }

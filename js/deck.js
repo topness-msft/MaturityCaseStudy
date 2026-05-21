@@ -91,7 +91,10 @@
     counter.textContent = `${currentIndex+1} / ${SLIDES.length}`;
     progress.style.width = (((currentIndex+1) / SLIDES.length) * 100).toFixed(1) + '%';
     btnPrev.disabled = currentIndex === 0;
-    btnNext.textContent = currentIndex === SLIDES.length - 1 ? 'Finish' : 'Next →';
+    const isLast = currentIndex === SLIDES.length - 1;
+    btnNext.textContent = 'Next →';
+    btnNext.disabled = isLast;
+    btnNext.style.visibility = isLast ? 'hidden' : '';
   }
 
   // ----- Render driver ------------------------------------------------
