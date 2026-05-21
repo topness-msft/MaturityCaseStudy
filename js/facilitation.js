@@ -18,7 +18,7 @@ window.FACILITATION = {
 },
 
 'opening-poll': {
-  talk: 'Reveal one card at a time. Hands stay up only if each statement is still true — count out loud so the room sees the curve.',
+  talk: 'Reveal one card at a time. Hands stay up only if each statement is still true — count out loud so the room sees the curve. (Typical: ~80% pilot, ~40% production, ~15% dependency, ~5% governance.)',
   probes: [
     '"Hands up if you\'ve piloted an agent — something beyond chat or copilot — in the last 12 months."',
     '"Keep it up if you\'ve actually shipped one. At least one agent in production touching real customers or real enterprise data."',

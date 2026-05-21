@@ -249,7 +249,7 @@
         body.appendChild(el('div', { cls: 'stage-label', text: s.label }));
         body.appendChild(el('div', { cls: 'stage-detail', text: s.detail }));
         row.appendChild(body);
-        const count = el('span', { cls: 'stage-count', text: revealed ? '~' + s.expectedPct + '%' : '—' });
+        const count = el('span', { cls: 'stage-count', text: revealed ? '✓' : '—' });
         row.appendChild(count);
         row.addEventListener('click', () => {
           sync.setReveal(slide.id, s.id, !revealed);
