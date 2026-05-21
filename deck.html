@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sarah Chen — Case Discussion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+<div class="deck-shell">
+  <header class="deck-topbar">
+    <div class="deck-topbar-left">
+      <button id="outline-toggle" class="btn btn-ghost btn-sm" aria-label="Open outline">☰ Outline</button>
+      <a href="./index.html" class="logo" style="text-decoration:none">
+        <img src="./assets/cat-logo.svg" alt="">
+        Sarah<span class="accent">Chen</span>
+      </a>
+      <span id="act-badge" class="act-badge"></span>
+    </div>
+    <div class="deck-topbar-right">
+      <span id="mode-pill" class="pill blue"></span>
+      <span id="sync-pill" class="sync-pill local" title="Sync status"><span class="dot"></span><span class="label">Local</span></span>
+      <span id="slide-counter" class="slide-counter"></span>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+        <span class="theme-toggle-icon" aria-hidden="true">☾</span>
+        <span class="theme-toggle-text">Dark</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="deck-main" id="deck-main" tabindex="0">
+    <div class="slide-stage" id="slide-stage" aria-live="polite"></div>
+  </main>
+
+  <footer class="deck-bottombar">
+    <div class="nav-cluster">
+      <button id="nav-prev" class="btn btn-ghost" aria-label="Previous slide">← Prev</button>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    <div class="nav-cluster">
+      <button id="nav-reset" class="btn btn-ghost btn-sm" aria-label="Reset this slide" title="Reset reveals on this slide">↺ Reset slide</button>
+      <button id="nav-next" class="btn btn-primary" aria-label="Next slide">Next →</button>
+    </div>
+  </footer>
+
+  <div class="outline-overlay" id="outline-overlay"></div>
+  <aside class="outline-drawer" id="outline-drawer" aria-label="Slide outline">
+    <div class="outline-header">
+      <h3>Outline</h3>
+      <button id="outline-close" class="btn btn-ghost btn-sm" aria-label="Close outline">✕</button>
+    </div>
+    <ul class="outline-list" id="outline-list"></ul>
+  </aside>
+</div>
+
+<script src="./js/theme.js"></script>
+<script src="./js/slides.js"></script>
+<script src="./js/sync.js"></script>
+<script src="./js/deck.js"></script>
+</body>
+</html>

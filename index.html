@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Driving Agent Adoption at Scale — Interactive Case Discussion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+<div class="landing">
+  <header class="landing-header">
+    <div class="logo">
+      <img src="./assets/cat-logo.svg" alt="">
+      Sarah<span class="accent">Chen</span>
+    </div>
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+      <span class="theme-toggle-icon" aria-hidden="true">☾</span>
+      <span class="theme-toggle-text">Dark</span>
+    </button>
+  </header>
+
+  <section class="landing-hero">
+    <h1>Driving Agent Adoption at Scale</h1>
+    <p>An interactive case discussion based on Woodgrove Bank — a fictional company facing a board mandate to deliver measurable AI economics in 12 months. Walk through Sarah Chen's strategic choices, the maturity diagnostic, transformation patterns, and the operating model that closes the gaps.</p>
+  </section>
+
+  <div class="mode-grid">
+    <a href="./deck.html?mode=self" class="mode-card" id="mode-self">
+      <div class="mode-eyebrow">Mode 1 · Self-paced</div>
+      <h2>Walk through it yourself</h2>
+      <p>Solo experience. Reflection prompts appear inline at each act — pause, commit to a choice, then reveal the insight. About 25 minutes if you don't rush.</p>
+      <div class="mode-arrow">Begin →</div>
+    </a>
+
+    <a href="#" class="mode-card" id="mode-present">
+      <div class="mode-eyebrow">Mode 2 · Presenter-led</div>
+      <h2>Run the live session</h2>
+      <p>Opens a presenter window with talk track, probing questions, and timing — plus a main display you point at the room. Same browser, no network needed.</p>
+      <div class="mode-arrow">Launch →</div>
+    </a>
+  </div>
+
+  <footer class="landing-meta">
+    <span>Adapted from the Frontier Firm Challenge facilitator guide · 2026 Work Trend Index</span>
+    <span><a href="https://aka.ms/adoptionpulse" target="_blank" rel="noopener">Adoption Pulse assessment ↗</a></span>
+  </footer>
+</div>
+
+<script src="./js/theme.js"></script>
+<script>
+  // Mode 2: open presenter window + main display together, sharing a session id.
+  document.getElementById('mode-present').addEventListener('click', (e) => {
+    e.preventDefault();
+    const session = 'sc-' + Math.random().toString(36).slice(2, 8);
+    // Open presenter first (it'll wait for the display)
+    const presenter = window.open(
+      './presenter.html?session=' + session,
+      'sc-presenter',
+      'width=520,height=820,menubar=no,toolbar=no,location=no'
+    );
+    if (!presenter) {
+      alert('Presenter window was blocked. Please allow popups for this site and try again.');
+      return;
+    }
+    // Then navigate this tab to the display
+    window.location.href = './deck.html?mode=present&session=' + session;
+  });
+</script>
+</body>
+</html>

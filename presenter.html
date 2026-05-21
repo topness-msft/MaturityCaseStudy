@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Presenter · Sarah Chen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+<div class="presenter-shell">
+  <header class="presenter-top">
+    <div class="presenter-top-left">
+      <div class="logo" style="font-size:0.95rem">
+        <img src="./assets/cat-logo.svg" alt="" style="height:24px">
+        Presenter
+      </div>
+      <span id="sync-pill" class="sync-pill waiting"><span class="dot"></span><span class="label">Waiting…</span></span>
+    </div>
+    <div id="presenter-timer" class="presenter-timer">
+      <span class="elapsed">0:00</span>
+      <span class="target" id="timer-target"></span>
+    </div>
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+      <span class="theme-toggle-icon" aria-hidden="true">☾</span>
+      <span class="theme-toggle-text">Dark</span>
+    </button>
+  </header>
+
+  <main class="presenter-main" id="presenter-main"></main>
+
+  <footer class="presenter-bottom">
+    <div class="nav-cluster">
+      <button id="nav-prev" class="btn btn-ghost btn-sm">← Prev</button>
+      <button id="nav-next" class="btn btn-primary btn-sm">Next →</button>
+    </div>
+    <div class="preview-next" id="preview-next"></div>
+    <div class="nav-cluster">
+      <button id="reset-session" class="btn btn-ghost btn-sm" title="Wipe all choices and reveals">↺ Reset</button>
+    </div>
+  </footer>
+</div>
+
+<script src="./js/theme.js"></script>
+<script src="./js/slides.js"></script>
+<script src="./js/facilitation.js"></script>
+<script src="./js/sync.js"></script>
+<script src="./js/presenter.js"></script>
+</body>
+</html>
