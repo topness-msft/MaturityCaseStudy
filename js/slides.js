@@ -368,7 +368,8 @@ window.SLIDES = [
       { num: '13%', label: 'of employees say they feel rewarded for doing AI work', accent: 'pink' }
     ],
     quote: 'The question isn\'t whether AI matters. It\'s whether you\'re willing to redesign your organization around what AI makes possible.',
-    quoteAttrib: '— Dr. Karim Lakhani, Harvard Business School · 2026 Work Trend Index Foreword'
+    quoteAttrib: '— Dr. Karim Lakhani, Harvard Business School · ',
+    quoteLink: { text: '2026 Work Trend Index Foreword', href: 'https://www.microsoft.com/en-us/worklab/work-trend-index' }
   }
 },
 

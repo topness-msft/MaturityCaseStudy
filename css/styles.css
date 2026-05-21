@@ -866,55 +866,71 @@ body {
 .gap-pillar { font-weight: 600; }
 .gap-bar {
   position: relative;
-  height: 30px;
+  height: 14px;
+  margin-top: 32px;
   background: var(--elevated);
-  border-radius: 6px;
+  border-radius: 7px;
   overflow: visible;
 }
 .gap-fill {
   position: absolute; left: 0; top: 0; bottom: 0;
   background: var(--green);
-  border-radius: 6px 0 0 6px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding-right: 8px;
-  min-width: 28px;
+  border-radius: 7px 0 0 7px;
+  min-width: 4px;
   z-index: 1;
 }
 .gap-fill-label {
-  font-size: 0.82rem;
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 6px);
+  transform: translateX(50%);
+  background: #fff;
+  border: 1px solid var(--green);
+  color: var(--green);
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 0.78rem;
   font-weight: 700;
-  color: #fff;
+  white-space: nowrap;
+  line-height: 1;
   font-variant-numeric: tabular-nums;
 }
 .gap-segment {
   position: absolute; top: 0; bottom: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0 6px 6px 0;
-  padding: 0 8px;
+  border-radius: 0 7px 7px 0;
   z-index: 0;
 }
 .gap-segment.zero  { background: transparent; }
 .gap-segment.small { background: var(--amber); }
 .gap-segment.large { background: var(--pink); }
 .gap-segment-label {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 6px);
+  transform: translateX(-50%);
+  background: #fff;
+  padding: 2px 7px;
+  border-radius: 4px;
   font-size: 0.78rem;
   font-weight: 700;
-  color: #fff;
   white-space: nowrap;
+  line-height: 1;
   font-variant-numeric: tabular-nums;
+  border: 1px solid currentColor;
 }
+.gap-segment.small .gap-segment-label { color: var(--amber); }
+.gap-segment.large .gap-segment-label { color: var(--pink); }
 .gap-onpoint {
-  margin-left: 8px;
+  position: absolute;
+  left: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
   font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: #fff;
-  opacity: 0.85;
+  color: var(--green);
+  white-space: nowrap;
 }
 .gap-action {
   gap: 18px;

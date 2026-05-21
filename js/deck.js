@@ -783,7 +783,13 @@
 
     const q = el('div', { cls: 'mirror-quote' });
     q.appendChild(el('span', { text: slide.config.quote }));
-    q.appendChild(el('div', { cls: 'mirror-quote-attrib', text: slide.config.quoteAttrib }));
+    const attrib = el('div', { cls: 'mirror-quote-attrib' });
+    attrib.appendChild(el('span', { text: slide.config.quoteAttrib }));
+    if (slide.config.quoteLink) {
+      const a = el('a', { text: slide.config.quoteLink.text, attrs: { href: slide.config.quoteLink.href, target: '_blank', rel: 'noopener' } });
+      attrib.appendChild(a);
+    }
+    q.appendChild(attrib);
     m.appendChild(q);
 
     wrap.appendChild(m);
