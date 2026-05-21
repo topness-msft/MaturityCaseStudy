@@ -12,16 +12,16 @@
   const STATE_KEY  = (id) => `sarahchen.state.${id}`;
   const EVENT_KEY  = (id) => `sarahchen.event.${id}`;
   const CHAN_NAME  = (id) => `sarahchen-session-${id}`;
-  const SENDER_KEY = 'sarahchen.senderId';
 
-  function getSenderId() {
-    let id = sessionStorage.getItem(SENDER_KEY);
-    if (!id) {
-      id = 'w-' + Math.random().toString(36).slice(2, 10);
-      sessionStorage.setItem(SENDER_KEY, id);
-    }
-    return id;
-  }
+  // Per-window-lifetime sender id. MUST NOT use sessionStorage: when the
+  // presenter window is opened via window.open() from index.html, the popup
+  // inherits the opener's sessionStorage and ends up with the same senderId
+  // as the deck window. With matching senderIds, every broadcast looks like
+  // a self-echo and gets dropped by _receive — so Next/Prev/reveal/choice
+  // events never cross between the two windows.
+  const SENDER_ID = 'w-' + Math.random().toString(36).slice(2, 10);
+
+  function getSenderId() { return SENDER_ID; }
 
   function getQuery() {
     const p = new URLSearchParams(window.location.search);
