@@ -136,8 +136,8 @@ window.SLIDES = [
   act: 2, actLabel: 'Act 2 · The Diagnosis',
   title: 'Activity ≠ maturity. Spend ≠ maturity.',
   subtitles: {
-    self: 'Tech is at 400. Governance at 300. Before you reveal — what do you think the other three pillars score?',
-    present: 'Two strong pillars. So what went wrong? Reveal Tech and Governance first — then predict the rest.'
+    self: 'After a recent maturity review, Woodgrove\'s pillars came back uneven. Technology scored 400. Governance & Security 300. Before you reveal — what do you think AI Strategy, Business Process, and Culture score?',
+    present: 'After a recent maturity review, Woodgrove\'s pillars came back uneven. Two strong, three unknown. Reveal Tech and Governance first, then ask the room to predict the other three.'
   },
   timing: { presentSeconds: 60, discussSeconds: 180 },
   render: 'maturity',
