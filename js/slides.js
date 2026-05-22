@@ -165,8 +165,8 @@ window.SLIDES = [
   act: 2, actLabel: 'Act 2 · The Bridge',
   title: 'Every option fixes one pillar — and only one.',
   subtitles: {
-    self: 'Option A maps to one pillar — try to match B, C, and D to a pillar each before you reveal.',
-    present: 'Reveal option A, then predict B/C/D.'
+    self: 'Each of Sarah\'s four options addresses exactly one pillar. Option A maps to AI Strategy — match B, C, and D to the pillar each would fix. All four are necessary; none is sufficient on its own. The right first move depends on what KIND of transformation you\'re betting on. That\'s called a pattern.',
+    present: 'Each option fixes one pillar — and only one. Reveal A first, then ask the room to predict B, C, and D. Land the takeaway: all four are necessary, none sufficient alone. The right first move depends on the pattern you\'re betting on.'
   },
   timing: { presentSeconds: 60, discussSeconds: 120 },
   render: 'bridge',
@@ -177,8 +177,7 @@ window.SLIDES = [
       { id: 'C', option: 'Fast-track agent approval path', detail: 'Solid compliance foundation but no agent-specific fast track. Every agent stays a 6-month approval.', pillar: 'Governance', value: 300, revealOrder: 3, hidden: true },
       { id: 'D', option: 'Equip motivated early adopters', detail: 'You\'d be fixing the people gap. But without strategy, enthusiasm stalls.', pillar: 'Org & Culture', value: 200, revealOrder: 4, hidden: true }
     ],
-    selfPrompt: 'Before revealing — try to match B, C, and D to the pillar each one would fix.',
-    insight: 'All four are necessary. None on its own is sufficient. Each fixes ONE pillar. The right first move depends on what KIND of transformation you\'re betting on. That\'s called a pattern.'
+    selfPrompt: 'Before revealing — try to match B, C, and D to the pillar each one would fix.'
   }
 },
 
