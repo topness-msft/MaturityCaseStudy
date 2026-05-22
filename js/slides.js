@@ -114,7 +114,7 @@ window.SLIDES = [
   timing: { presentSeconds: 30, discussSeconds: 90 },
   render: 'poll',
   config: {
-    selfPrompt: 'Before you continue — which would you actually pick? Commit, then move on.',
+    selfPrompt: 'What action should Sarah do next? Commit to one next action.',
     choices: [
       { id: 'A', headline: 'Appoint an AI strategy lead', meta: 'Build a prioritized agent roadmap.',
         selfProbe: 'You\'re thinking like a coordinator — you see a leadership gap. Hold this question: what\'s their first brief, given only 2 low-value agents are live? A roadmap leads nowhere without process redesign or governance.' },
